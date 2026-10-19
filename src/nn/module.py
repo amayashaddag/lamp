@@ -6,7 +6,7 @@ class Module():
     layers: list[Layer]
     
     def __init__(self, layers: list[Layer]): 
-        self.layers = layers   
+        self.layers = layers  
     
     def forward(self, X: np.ndarray) -> np.ndarray: 
         y = X
