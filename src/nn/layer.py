@@ -18,7 +18,7 @@ class Linear(Layer):
     b: np.ndarray | None
     bias: bool 
     X: np.ndarray | None
-    dW: np.ndarray | None
+    dW: np.ndarray
     db: np.ndarray | None
     
     def __init__(self, in_features: int, out_features: int, bias: bool):
@@ -27,8 +27,8 @@ class Linear(Layer):
         self.b = np.zeros(out_features) if bias else None
         self.bias = bias
         self.X = None
-        self.dW = None 
-        self.db = None
+        self.dW = np.zeros_like(self.W)
+        self.db = np.zeros_like(self.b) if bias else None
         
     def forward(self, X: np.ndarray) -> np.ndarray: 
         if X.ndim != 2:
@@ -50,10 +50,10 @@ class Linear(Layer):
                 f"got {dy.shape}"
             )
         dW = self.X.T @ dy
-        self.dW = dW
-        if self.bias:
+        self.dW[...] = dW
+        if self.bias and self.db is not None:
             db = np.sum(dy, axis=0)
-            self.db = db
+            self.db[...] = db
         dX = dy @ self.W.T 
         return dX
         
