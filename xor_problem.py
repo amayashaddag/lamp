@@ -2,7 +2,7 @@
 
 from nn.module import Module 
 from nn.layer import Linear, Sigmoid, ReLU
-from nn.sgd import SGD
+from optim.sgd import SGD
 from nn.loss import MSELoss
 
 import numpy as np

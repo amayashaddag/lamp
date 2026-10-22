@@ -7,7 +7,8 @@ from pathlib import Path
 
 from nn.module import Module 
 from nn.layer import Linear, ReLU
-from nn.sgd import SGD
+from optim.sgd import SGD
+from optim.adam import Adam
 from nn.loss import CrossEntropyLoss
 
 #%%
@@ -44,8 +45,15 @@ model = Module([
     Linear(128, 10, bias=True),
 ])
 loss_fn = CrossEntropyLoss()
-optim = SGD(model.parameters(), lr=0.1)
-epochs = 10
+optim = Adam(
+    parameters=model.parameters(), 
+    lr=0.001, 
+    beta_1=0.9,
+    beta_2=0.999,
+    eps=1e-8,
+)
+# optim = SGD(model.parameters(), lr=0.08, momentum=0.9)
+epochs = 18
 batchs = X_train.shape[0] // 64
 for epoch in range(epochs):
     i = 0
@@ -73,7 +81,7 @@ print(f"Test accuracy: {accuracy:.2%}")
 
 #%% 
 
-ind = 76
+ind = 2837
 image = X_test[ind].reshape(28, 28)
 plt.imshow(image)
 plt.show()
