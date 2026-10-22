@@ -98,5 +98,19 @@ class Sigmoid(Layer):
         return dX
         
         
-         
-            
+class Flatten(Layer):
+    X: np.ndarray | None
+
+    def __init__(self):
+        self.X = None
+
+    def forward(self, X: np.ndarray) -> np.ndarray:
+        self.X = X
+        if X.ndim < 2:
+            return X.copy()
+        return X.reshape(X.shape[0], -1)
+
+    def backward(self, dy: np.ndarray) -> np.ndarray:
+        if self.X is None:
+            raise RuntimeError("forward must be called before backward")
+        return dy.reshape(self.X.shape)

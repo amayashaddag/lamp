@@ -28,7 +28,7 @@ model = Module([
     Sigmoid(),
 ])
 loss_fn = MSELoss()
-optimizer = SGD(model.parameters(), lr=0.1)
+optimizer = SGD(model.parameters(), lr=0.1, momentum=0)
 for epoch in range(5000):
     y_pred = model.forward(X)
     loss = loss_fn.forward(y_pred, y_true)
