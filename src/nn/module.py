@@ -4,9 +4,11 @@ import numpy as np
 
 class Module():
     layers: list[Layer]
+    train_mode: bool
     
     def __init__(self, layers: list[Layer]): 
         self.layers = layers  
+        self.train_mode = True
     
     def forward(self, X: np.ndarray) -> np.ndarray: 
         y = X
@@ -26,5 +28,16 @@ class Module():
             params.append((l.W, l.dW))
             if l.bias: 
                 params.append((l.b, l.db))
-        return params        
+        return params    
+    
+    def train(self):     
+        self.train_mode = True
+        for l in self.layers: 
+            l.train()
         
+    def eval(self): 
+        self.train_mode = False
+        for l in self.layers:
+            l.eval()
+    
+    

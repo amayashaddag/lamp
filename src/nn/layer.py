@@ -3,6 +3,11 @@ from abc import ABC, abstractmethod
 
 
 class Layer(ABC):
+    train_mode: bool
+    
+    def __init__(self): 
+        self.train_mode = True
+    
     @abstractmethod
     def forward(self, X: np.ndarray) -> np.ndarray: 
         pass
@@ -10,6 +15,12 @@ class Layer(ABC):
     @abstractmethod
     def backward(self, dy: np.ndarray) -> np.ndarray:
         pass
+    
+    def train(self): 
+        self.train_mode = True
+    
+    def eval(self): 
+        self.train_mode = False
     
     
 class Linear(Layer): 
@@ -22,6 +33,7 @@ class Linear(Layer):
     db: np.ndarray | None
     
     def __init__(self, in_features: int, out_features: int, bias: bool):
+        super().__init__()
         self.in_features = in_features
         self.W = np.random.normal(0, np.sqrt(2 / (in_features + out_features)), size=(in_features, out_features))
         self.b = np.zeros(out_features) if bias else None
@@ -31,6 +43,7 @@ class Linear(Layer):
         self.db = np.zeros_like(self.b) if bias else None
         
     def forward(self, X: np.ndarray) -> np.ndarray: 
+        super().__init__()
         if X.ndim != 2:
             raise ValueError(f"Expected a 2D array (batch_size, in_features), got shape {X.shape}")
         if X.shape[1] != self.in_features:
@@ -62,6 +75,7 @@ class ReLU(Layer):
     X: np.ndarray | None
     
     def __init__(self): 
+        super().__init__()
         self.X = None 
         
     def forward(self, X: np.ndarray) -> np.ndarray:
@@ -80,6 +94,7 @@ class Sigmoid(Layer):
     X: np.ndarray | None 
     
     def __init__(self): 
+        super().__init__()
         self.X = None 
         
     @staticmethod
@@ -102,6 +117,7 @@ class Flatten(Layer):
     X: np.ndarray | None
 
     def __init__(self):
+        super().__init__()
         self.X = None
 
     def forward(self, X: np.ndarray) -> np.ndarray:

@@ -16,7 +16,7 @@ class Adam():
         parameters: list[tuple[np.ndarray, np.ndarray]],
         beta_1: float,
         beta_2: float,
-        lr: float,
+        lr: float,                                                       
         eps: float,
     ): 
         self.parameters = parameters
